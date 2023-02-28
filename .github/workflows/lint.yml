@@ -1,0 +1,33 @@
+name: Lint
+
+on:
+  pull_request:
+
+env:
+#  TERRAFORM_VERSION: 1.3.7
+  TERRAFORM_LINT_VERSION: v0.44.1
+
+jobs:
+  fmt:
+    name: Terraform Code Format
+    runs-on: ubuntu-latest
+    container:
+      image: hashicorp/terraform:latest
+    steps:
+      - uses: actions/checkout@master
+      - run: terraform fmt --recursive -check=true
+
+  tflint:
+    name: TFLint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+
+      - name: Install dependencies
+        shell: bash
+        run: |
+          curl -sLo ./tflint.zip https://github.com/terraform-linters/tflint/releases/download/${{ env.TERRAFORM_LINT_VERSION }}/tflint_linux_amd64.zip && unzip -qq tflint.zip && rm tflint.zip 2> /dev/null && sudo mv tflint /usr/bin/
+
+      - name: TFLint
+        shell: bash
+        run: tflint --recursive

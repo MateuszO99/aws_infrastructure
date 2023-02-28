@@ -1,0 +1,8 @@
+.terraform
+.terraform.lock.hcl
+.idea
+*.tfvars
+*.tfstate
+jenkins-ssh-key
+*.pub
+*.backup
